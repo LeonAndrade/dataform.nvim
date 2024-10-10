@@ -1,54 +1,43 @@
 local dataform_core = {}
 
 dataform_core.compile = function()
-	print("Compiling dataform project...")
+	print("Compiling dataform project hey...")
 
-	-- Compile current project
 	local buf = vim.api.nvim_create_buf(true, true)
 	vim.api.nvim_open_win(buf, true, { vertical = true, split = "right" })
-	vim.api.nvim_buf_set_lines(buf, 0, -1, true, { "Dataform Compilation Result", "-----", "\n" })
+	vim.api.nvim_buf_set_lines(buf, 0, -1, true, { "Dataform Compilation Result" })
 
-	vim.fn.jobstart({ "dataform", "compile", "--json" }, {
-		stdout_buffered = true,
-
-		on_stdout = function(_, data)
+	vim.system({ "dataform", "compile", "--json" }, {
+		text = true,
+		stdout = function(err, data)
 			if data then
-				vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
+				print("writing to file")
+				print(string.len(data))
+				print(data)
+				-- vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
+				local fd = assert(io.open(vim.fn.stdpath("data") .. "/dataform/compilation_result.json", "a"))
+				fd:write(data)
+				fd:close()
+				-- print("Finished writing to file")
 			end
-		end,
-
-		on_stderr = function(_, data)
-			if data then
-				vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
+			if err then
+				print(err)
 			end
 		end,
 	})
-
-	-- Save file to $XDG_CONFIG_HOME/.local/share/nvim/dataform
+	--
+	-- vim.fn.jobstart({ "dataform", "compile", "--json" }, {
+	-- 	stdout_buffered = true,
+	-- 	on_stdout = function(_, data)
+	-- 		if data then
+	-- 			print("writing to file")
+	-- 			vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
+	-- 			local fd = assert(io.open(vim.fn.stdpath("data") .. "/dataform/compilation_result.json", "w+"))
+	-- 			fd:write(data)
+	-- 			fd:close()
+	-- 		end
+	-- 	end,
+	-- })
 end
 
--- local bufnr = 7
--- vim.api.nvim_create_autocmd("BufWritePost", {
---   group = vim.api.nvim_create_augroup("MyCoolAugroup", { clear = true }),
---   pattern = "main.go",
---   callback = function()
---     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "Output of: main.go" })
---     vim.fn.jobstart({ "go", "run", "main.go" }, {
---       stdout_buffered = true,
---
---       on_stdout = function(_, data)
---         if data then
---           vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
---         end
---       end,
---
---       on_stderr = function(_, data)
---         if data then
---           vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
---         end
---       end,
---     })
---   end,
--- })
---
 return dataform_core
