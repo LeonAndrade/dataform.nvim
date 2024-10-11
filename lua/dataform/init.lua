@@ -5,6 +5,7 @@ local setup = function(opts)
 end
 
 return {
-	compile = core.compile,
 	setup = setup,
+	compile = core.compile,
+	view_compiled_sql = core.view_compiled_sql,
 }
