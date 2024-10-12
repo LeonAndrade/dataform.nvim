@@ -18,7 +18,7 @@ dataform_core.compile = function()
 	dataform_core._build_compilation_dir()
 end
 
-dataform_core.view_compiled_sql = function()
+dataform_core.view_sql = function()
 	print("Should open the compiled version of the current file in a side buffer")
 	local current_buf_file = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
 	local definition_path = current_buf_file:match("(definitions/.*)%.[jsqlx]+$")

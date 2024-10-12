@@ -46,3 +46,47 @@ with neovim.
 
 • Eventually include better features like formatting and testing locally with duckdb...
 
+
+---
+
+- How to handle multiple dataform projects?
+- Avoid compiled bloat from growing too large.
+- Guarantee that all files are overwritten on compile.
+- Validate on BigQuery
+- Run on BigQuery
+- Allow me to create and initialize a development workspace on GCP
+
+---
+
+TODO:
+- Lexer and Tokenizer
+    - builds tokens
+
+- Parser for TreeSitter
+    - parsers a token list and builds an ast
+
+- who knows a LSP for Dataform...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

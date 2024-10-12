@@ -1,11 +1,17 @@
-local core = require("dataform.core")
+local compiler = require("dataform.compiler")
 
-local setup = function(opts)
+local Dataform = {}
+
+Dataform.setup = function(opts)
 	opts = opts or {}
 end
 
-return {
-	setup = setup,
-	compile = core.compile,
-	view_compiled_sql = core.view_compiled_sql,
-}
+Dataform.compile = function()
+	compiler.compile_project()
+	compiler.generate_files()
+end
+
+Dataform.get_compiled_sql = function() end
+
+Dataform.workspace_init()
+return Dataform
