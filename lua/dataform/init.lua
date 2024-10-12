@@ -1,4 +1,5 @@
 local compiler = require("dataform.compiler")
+local render = require("dataform.render")
 
 local Dataform = {}
 
@@ -11,7 +12,8 @@ Dataform.compile = function()
 	compiler.generate_files()
 end
 
-Dataform.get_compiled_sql = function() end
+Dataform.render_sql = function()
+	render.compiled_sql()
+end
 
-Dataform.workspace_init()
 return Dataform

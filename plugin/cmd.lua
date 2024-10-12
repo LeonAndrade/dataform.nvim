@@ -9,8 +9,8 @@ local subcdm_tbl = {
 	compile = {
 		impl = require("dataform").compile,
 	},
-	view_sql = {
-		impl = require("dataform").view_sql,
+	render_sql = {
+		impl = require("dataform").render_sql,
 	},
 }
 

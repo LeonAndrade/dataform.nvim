@@ -25,20 +25,27 @@ Compiler.generate_files = function()
 	end)
 end
 
+---@return table graph
 Compiler.parse_json_graph = function()
 	local compiled_graph = utils.read_file(config.COMPILATION_RESULT_JSON)
 	return vim.json.decode(compiled_graph, { object = true, array = true })
 end
 
+Compiler.search_graph = function(filename)
+	local graph = Compiler.parse_json_graph()
+	graph:filter(function(table)
+		return table["fileName"] == filename
+	end)
+end
+
 Compiler.generate_compiled_action = function(action_config)
 	local parent_dir = action_config["fileName"]:gsub("/[%a_0-9]*%.[jsqlx]+$", "")
 	local action_target_name = action_config["target"]["name"]
-	local action_dir = parent_dir .. "/" .. action_target_name
-
+	local action_dir = config.DATA_DIR .. parent_dir .. "/" .. action_target_name
+	print("action_dir: " .. action_dir)
 	if vim.fn.isdirectory(action_dir) == 0 then
 		vim.system({ "mkdir", "-p", action_dir }):wait()
 	end
-
 	local config_json = vim.json.encode(action_config)
 	utils.write_file(action_dir .. "/query.sql", action_config["query"])
 	utils.write_file(action_dir .. "/config.json", config_json)
