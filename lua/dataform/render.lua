@@ -7,13 +7,9 @@ local Render = {}
 Render.compiled_sql = function()
 	local current_file = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
 	local action_config = compiler.search_graph(current_file)
-	vim.print(action_config)
-
-	local definition_path = current_file:match("(definitions/.*)%.[jsqlx]+$")
-
+	local definitions_path = utils.get_definitions_path(action_config["fileName"])
 	local buf = vim.api.nvim_create_buf(false, true)
-	local sql = utils.read_file(config.DATA_DIR .. definition_path .. "/query.sql")
-
+	local sql = utils.read_file(config.DATA_DIR .. definitions_path .. "/query.sql")
 	for line in sql:gmatch("([^\n]*)\n?") do
 		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { line })
 	end

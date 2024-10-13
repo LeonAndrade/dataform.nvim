@@ -11,7 +11,6 @@ Compiler.compile_project = function()
 	if vim.fn.isdirectory(config.DATA_DIR) == 0 then
 		vim.system({ "mkdir", "-p", config.DATA_DIR }):wait()
 	end
-
 	vim.system({ "dataform", "compile", "--json" }, {
 		text = true,
 		stdout = function(_, data)
@@ -38,8 +37,8 @@ end
 Compiler.search_graph = function(filename)
 	local graph = Compiler.parse_json_graph()
 	local result = vim.iter(graph["tables"]):find(function(table)
-		local source = filename:match("(definitions/.*)%.[jsqlx]+$")
-		local target = table["fileName"]:match("(definitions/.*)%.[jsqlx]+$")
+		local source = utils.get_definitions_path(filename)
+		local target = utils.get_definitions_path(table["fileName"])
 		return source == target
 	end)
 	return result

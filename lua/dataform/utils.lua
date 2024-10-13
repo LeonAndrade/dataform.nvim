@@ -36,4 +36,8 @@ Utils.split_string = function(s, delimiter)
 	return result
 end
 
+Utils.get_definitions_path = function(filepath)
+	return filepath:match("(definitions/.*)%.[jsqlx]+$")
+end
+
 return Utils
