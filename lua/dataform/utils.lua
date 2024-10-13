@@ -4,6 +4,7 @@ local Utils = {}
 ---@param data string data as text
 Utils.write_file = function(path, data)
 	local fd = assert(io.open(path, "a+"))
+	fd:seek("set", 0)
 	if fd then
 		fd:write(data)
 		fd:close()
