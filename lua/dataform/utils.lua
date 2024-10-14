@@ -4,7 +4,6 @@ local Utils = {}
 ---@param data string data as text
 Utils.write_file = function(path, data)
 	local fd = assert(io.open(path, "a+"))
-	fd:seek("set", 0)
 	if fd then
 		fd:write(data)
 		fd:close()
@@ -34,10 +33,6 @@ Utils.split_string = function(s, delimiter)
 	end
 	table.insert(result, string.sub(s, from))
 	return result
-end
-
-Utils.get_definitions_path = function(filepath)
-	return filepath:match("(definitions/.*)%.[jsqlx]+$")
 end
 
 return Utils

@@ -5,11 +5,11 @@ local utils = require("dataform.utils")
 local Render = {}
 
 Render.compiled_sql = function()
-	local current_file = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
-	local action_config = compiler.search_graph(current_file)
-	local definitions_path = utils.get_definitions_path(action_config["fileName"])
+	local action = compiler.search_graph(config.get_current_file())
+	local definitions_path = config.get_definitions_path(action["fileName"])
+	local sql = utils.read_file(config.get_compiled_action_asset(definitions_path, "/query.sql"))
+
 	local buf = vim.api.nvim_create_buf(false, true)
-	local sql = utils.read_file(config.DATA_DIR .. definitions_path .. "/query.sql")
 	for line in sql:gmatch("([^\n]*)\n?") do
 		vim.api.nvim_buf_set_lines(buf, -1, -1, false, { line })
 	end

@@ -1,21 +1,19 @@
--- Dataform Compiler Module
---
--- This module is responsible for compiling and managing the compiled files
--- in vim.fn.stdpath('data'), it should be considered a private API.
 local config = require("dataform.config")
 local utils = require("dataform.utils")
 
 local Compiler = {}
 
+local WORKSPACE = config.get_workspace_dir()
+
 Compiler.compile_project = function()
-	if vim.fn.isdirectory(config.DATA_DIR) == 0 then
-		vim.system({ "mkdir", "-p", config.DATA_DIR }):wait()
+	if vim.fn.isdirectory(WORKSPACE) == 0 then
+		vim.system({ "mkdir", "-p", WORKSPACE }):wait()
 	end
 	vim.system({ "dataform", "compile", "--json" }, {
 		text = true,
 		stdout = function(_, data)
 			if data then
-				utils.write_file(config.DATA_DIR .. "compilation_result.json", data)
+				utils.write_file(WORKSPACE .. "/compilation_result.json", data)
 			end
 		end,
 	}):wait()
@@ -30,7 +28,7 @@ end
 
 ---@return table graph
 Compiler.parse_json_graph = function()
-	local compiled_graph = utils.read_file(config.DATA_DIR .. "compilation_result.json")
+	local compiled_graph = utils.read_file(WORKSPACE .. "/compilation_result.json")
 	return vim.json.decode(compiled_graph, { object = true, array = true })
 end
 
@@ -54,7 +52,7 @@ end
 Compiler.get_compiled_action_path = function(action_config)
 	local parent_dir = action_config["fileName"]:gsub("/[%a_0-9]*%.[jsqlx]+$", "")
 	local action_target_name = action_config["target"]["name"]
-	local action_dir = config.DATA_DIR .. parent_dir .. "/" .. action_target_name
+	local action_dir = WORKSPACE .. parent_dir .. "/" .. action_target_name
 	if vim.fn.isdirectory(action_dir) == 0 then
 		vim.system({ "mkdir", "-p", action_dir }):wait()
 	end
