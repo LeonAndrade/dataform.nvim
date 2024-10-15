@@ -1,27 +1,39 @@
+---@diagnostic disable
+
 ---@class CompilationResult
 ---@field tables ITable[]
+---@field operations IOperation[]
 ---@field projectConfig IProjectConfig
 ---@field graphErrors GraphErrors
 ---@field declarations IDeclaration[]
+---@field dataformCoreVersion string
 ---@field targets ITarget[]
 
 ---@class ITable
----@field type
+---@field fileName string
+---@field type string
 ---@field target ITarget
----@field query sql
+---@field query string
 ---@field disabled boolean
 ---@field preOps string[]
 ---@field tags string[]
 ---@field bigquery IBigQuery
 ---@field actionDescriptor IActionDescriptor
----@field incrementalQuery
----@field dependencyTargets
----@field incrementalPreOps
----@field enumType
+---@field incrementalQuery string
+---@field dependencyTargets ITarget[]
+---@field incrementalPreOps string[]
+---@field enumType string
+
+---@class IOperation
+---@field target ITarget
+---@field queries string[]
+---@field fileName string
+---@field hermeticity string
+---@field canonicalTarget ITarget
 
 ---@class IActionDescriptor
 ---@field description string
----@field columns string[]
+---@field columns table<string, string>
 
 ---@class IBigQuery
 ---@field partitionBy string
@@ -52,3 +64,22 @@
 ---@field schemaSuffix? string The suffix that should be appended to all database schemas.
 ---@field tablePrefix? string The prefix that should be prepended to all table names.
 ---@field warehouse string Must be set to bigquery.
+
+---@class GraphErrors
+---@field compilationErrors ICompilationError[]
+
+---@class ICompilationError
+---@field fileName string
+---@field message string
+---@field stack string
+---
+---@type ITable | IOperation | IDeclaration
+---@class IAction
+
+---------------------------------
+---------------------------------
+
+---@class ActionPaths
+---@field relative string Action path relative to the definitions folder.
+---@field compiled string Absolute path where action compilation assets are stored.
+---@field source string Absolute path for the source file of the action
